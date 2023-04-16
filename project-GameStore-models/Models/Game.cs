@@ -15,7 +15,7 @@ namespace project_GameStore_models.Models
         public string Name { get; set; }
         [Required]
         [StringLength(500)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public virtual Category? Category { get; set; }
         public virtual ICollection<Entity_Game>? Keys_Game { get; set;}
     }
