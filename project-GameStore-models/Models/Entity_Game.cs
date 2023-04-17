@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace project_GameStore_models.Models
 {
-    public class Entity_Game
+    public class Entity_Game:IEntity
     {
         public Guid Id { get; set; }
         [Required]

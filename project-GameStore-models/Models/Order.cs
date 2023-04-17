@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace project_GameStore_models.Models
 {
-    public class Order
+    public class Order : IEntity
     {
         public Guid Id { get; set; }
         [Required]
