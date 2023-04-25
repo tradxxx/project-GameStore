@@ -5,7 +5,11 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "project-GameStore-models", "project-GameStore-models\project-GameStore-models.csproj", "{CB0BC8E2-CD2A-41F3-9FE1-490F27D8D7FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "project-GameStore-dblayer", "project-GameStore-dblayer\project-GameStore-dblayer.csproj", "{38375FB5-663E-404D-923E-1E7671473D4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "project-GameStore-dblayer", "project-GameStore-dblayer\project-GameStore-dblayer.csproj", "{38375FB5-663E-404D-923E-1E7671473D4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "project-GameStore-server", "project-GameStore-server\project-GameStore-server.csproj", "{2AEF893D-1731-4744-ADE6-8F3DB817A5C2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{56CD948A-E180-4735-AC28-08DD3C035329}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,10 @@ Global
 		{38375FB5-663E-404D-923E-1E7671473D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38375FB5-663E-404D-923E-1E7671473D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38375FB5-663E-404D-923E-1E7671473D4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AEF893D-1731-4744-ADE6-8F3DB817A5C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AEF893D-1731-4744-ADE6-8F3DB817A5C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AEF893D-1731-4744-ADE6-8F3DB817A5C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AEF893D-1731-4744-ADE6-8F3DB817A5C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
