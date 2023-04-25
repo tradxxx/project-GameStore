@@ -16,6 +16,13 @@ namespace project_GameStore_models.Models
         [Required]
         [StringLength(50)]
         public string Email { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string Password { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string Login { get; set; }
+        public Role Role { get; set; }
         public virtual ICollection<Order>? Orders { get; set; }
     }
 }
