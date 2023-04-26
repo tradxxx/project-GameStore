@@ -51,6 +51,12 @@ namespace project_GameStore_server.Service
             return Sessions.FirstOrDefault(x => x.Token == token)?.User.Role ?? throw new Exception("User is not found");
         }
 
+        public Client GetClient(Guid token)
+        {
+            CleanSession();
+            return Sessions.FirstOrDefault(x => x.Token == token)?.User ?? throw new Exception("User is not found");
+        }
+
 
     }
 }

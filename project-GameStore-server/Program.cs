@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Serialization;
 using project_GameStore_server.Service;
 using System.Reflection;
 
@@ -15,6 +16,15 @@ builder.Services.AddSwaggerGen(c =>
     c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
 
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+});
+
+builder.Services.AddControllers().AddNewtonsoftJson(x =>
+{
+    x.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+    x.SerializerSettings.ContractResolver = new DefaultContractResolver()
+    {
+        NamingStrategy = new CamelCaseNamingStrategy()
+    };
 });
 
 var app = builder.Build();

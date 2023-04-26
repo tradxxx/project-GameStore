@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace project_GameStore_models.Models
@@ -16,6 +17,7 @@ namespace project_GameStore_models.Models
         [Required]
         [StringLength(50)]
         public string Email { get; set; }
+        [JsonIgnore]
         [Required]
         [StringLength(50)]
         public string Password { get; set; }
