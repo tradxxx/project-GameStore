@@ -13,6 +13,8 @@ namespace project_GameStore_dblayer
 {
     public class ProjectManagerContext : DbContext
     {
+        private const string configPath = "db_config.json";
+
         public DbSet<Category> Categories { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Entity_Game> Entities { get; set; }
@@ -22,10 +24,10 @@ namespace project_GameStore_dblayer
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!File.Exists("db_config.json"))
+            if (!File.Exists(configPath))
                 throw new FileNotFoundException("Missing db_config");
 
-            var jsonString = File.ReadAllText("db_config.json");
+            var jsonString = File.ReadAllText(configPath);
             var json = JObject.Parse(jsonString);
             var connectionString = json["connectionString"]?.ToString() ?? throw new KeyNotFoundException("ConnectionString is missing");
 

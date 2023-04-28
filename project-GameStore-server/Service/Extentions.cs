@@ -3,7 +3,7 @@ using System.Text;
 
 namespace project_GameStore_server.Service
 {
-    public class Extentions
+    internal class Extentions
     {
         public static string ComputeSha256Hash(string rawData)
         {
