@@ -30,7 +30,6 @@ namespace project_GameStore_server.Service
         private EntityGateway db = new();
         public Guid Auth(string username, string password)
         {
-            CleanSession();
             var pashash = Extentions.ComputeSha256Hash(password);
 
             var potentialUser = db.GetClients(x => x.Login == username && x.Password == pashash).FirstOrDefault() ??
@@ -48,7 +47,7 @@ namespace project_GameStore_server.Service
         public Role GetRole(Guid token)
         {
             CleanSession();
-            return Sessions.FirstOrDefault(x => x.Token == token)?.User.Role ?? throw new Exception("User is not found");
+            return Sessions.FirstOrDefault(x => x.Token == token)?.User.Role ?? throw new Exception("Session is not found");
         }
 
         public Client GetClient(Guid token)
