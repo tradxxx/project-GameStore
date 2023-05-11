@@ -22,11 +22,11 @@ namespace project_GameStore_server.Controllers
         /// <returns>message with token</returns>
 
         [HttpPost]
-        public IActionResult AuthPost(string username,string password)
+        public IActionResult AuthPost(string login,string password)
         {
             try
             {
-                var token = _localAuthService.Auth(username, password);
+                var token = _localAuthService.Auth(login, password);
                 return Ok(new
                 {
                     status = "ok",
@@ -103,22 +103,23 @@ namespace project_GameStore_server.Controllers
         /// <summary>
         /// register new client
         /// </summary>
-        /// <param name="json"></param>
+        /// <param name="userjson"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("signup")]
-        public IActionResult SignUp([FromBody] JObject json)
+        public IActionResult SignUp([FromBody] JObject userjson)
         {
             //Прописать логику регистрации клиента через EntityGateway
             try
             {
-                if (_db.GetClients(x => x.Login == json["login"]?.ToString()).Any())
+                if (_db.GetClients(x => x.Login == userjson["login"].ToString()).Any())
                     throw new Exception("User with this login exists");
                 Client potentialClient = new()
                 {
-                    Login = json["login"]?.ToString() ?? throw new Exception("Login is missing"),
-                    Password = Extentions.ComputeSha256Hash(json["password"]?.ToString() ?? throw new Exception("Password is missing")),
-                    Name = json["name"]?.ToString() ?? throw new Exception("Name is missing"),
+                    Login = userjson["login"]?.ToString() ?? throw new Exception("Login is missing"),
+                    Password = Extentions.ComputeSha256Hash(userjson["password"]?.ToString() ?? throw new Exception("Password is missing")),
+                    Name = userjson["name"]?.ToString() ?? throw new Exception("Name is missing"),
+                    Email = userjson["email"]?.ToString() ?? throw new Exception("Email is missing"),
                     Role = Role.User
                 };
                  _db.AddOrUpdate(potentialClient);

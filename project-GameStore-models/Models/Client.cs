@@ -19,7 +19,6 @@ namespace project_GameStore_models.Models
         public string Email { get; set; }
         [JsonIgnore]
         [Required]
-        [StringLength(50)]
         public string Password { get; set; }
         [Required]
         [StringLength(50)]
