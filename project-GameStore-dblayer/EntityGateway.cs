@@ -1,12 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
-using project_GameStore_models;
+﻿using project_GameStore_models;
 using project_GameStore_models.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace project_GameStore_dblayer
 {
@@ -36,29 +31,20 @@ namespace project_GameStore_dblayer
         }
 
 
-        public int AddEntityToGame(Game game, params Entity_Game[] entity_Games)
+        public int EntitiesInGame(ActionType action,Guid gameId, params Guid[] entitiesIds)
         {
-            if (Context.Entry(game).State == EntityState.Detached)
-                game = Context.Games.FirstOrDefault(x => x.Id == game.Id) ??
-                    throw new Exception("Game dooes not exist.");
-            List<Entity_Game> entity_GamesList = new(entity_Games);
-            for (int i = 0; i < entity_Games.Length; i++)
-            {
-                Entity_Game entity = entity_GamesList[i];
-                if (Context.Entry(entity).State == EntityState.Detached ||
-                    (entity = Context.Entities.FirstOrDefault(x => x.Id == entity!.Id)!) is null)
-                    entity_GamesList.RemoveAt(i--);
-            }
-            var toChange = Context.Entities
-                .Where(x => entity_GamesList.Contains(x))
-                .Except(game.Keys_Game)
-                .ToArray();
+            var game = Context.Games.FirstOrDefault(x => x.Id == gameId)
+                 ?? throw new Exception("Game is not found.");
 
+            var entities = Context.Entities.Where(x =>
+                entitiesIds.Contains(x.Id)).Except(game.Keys_Game).ToArray();
 
-
-            AddOrUpdate(game);
-            Context.SaveChanges();
-            return toChange.Length;
+            foreach(Entity_Game entity in entities)         
+                if (action == ActionType.Add)         
+                    game.Keys_Game.Add(entity);          
+                else  
+                    game.Keys_Game.Remove(entity);
+            return entities.Length;
         }
 
 
@@ -93,5 +79,13 @@ namespace project_GameStore_dblayer
             GC.SuppressFinalize(this);
         }
         #endregion
+
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public enum ActionType
+        {
+            Add,
+            Remove
+        }
     }
 }

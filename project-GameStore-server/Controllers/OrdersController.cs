@@ -52,4 +52,5 @@ namespace project_GameStore_server.Controllers
                 });
             }
         }
+    }
 }

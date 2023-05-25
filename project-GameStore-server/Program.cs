@@ -1,6 +1,7 @@
 using Newtonsoft.Json.Serialization;
 using project_GameStore_server.Service;
 using System.Reflection;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,19 +14,22 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
-
+    c.UseInlineDefinitionsForEnums();
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
 });
 
 builder.Services.AddControllers().AddNewtonsoftJson(x =>
 {
     x.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+    x.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
     x.SerializerSettings.ContractResolver = new DefaultContractResolver()
     {
         NamingStrategy = new CamelCaseNamingStrategy()
     };
+
 });
+
+builder.Services.AddSwaggerGenNewtonsoftSupport();
 
 var app = builder.Build();
 
@@ -42,6 +46,7 @@ app.UseCors(cors => cors
     .SetIsOriginAllowed(origin => true)
     .AllowCredentials());
 
+app.UseWebSockets();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
