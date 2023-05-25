@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 using project_GameStore_dblayer;
 using project_GameStore_models;
 using project_GameStore_models.Models;
 using project_GameStore_server.Service;
+using static project_GameStore_dblayer.EntityGateway;
 
 namespace project_GameStore_server.Controllers
 {
@@ -56,7 +56,9 @@ namespace project_GameStore_server.Controllers
                 return Ok(new
                 {
                     status = "ok",
-                    game = potentialGame
+                    game = potentialGame,
+                    entities = potentialGame.Keys_Game.Select(x => x.Id),
+                    category = potentialGame.Category
                 });
             else
                 return NotFound(new
@@ -67,21 +69,31 @@ namespace project_GameStore_server.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/entities")]
-        public IActionResult GetEntitiesInGame([FromRoute] Guid id)
+        [Route("{id}/subdata")]
+        public IActionResult GetSubdataFromGame([FromRoute] Guid id, [FromRoute] EntitySubdata subdata)
         {
             var potentialGame = _db.GetGames(x => x.Id == id).FirstOrDefault();
-            return potentialGame is null ?
-                 NotFound(new
-                 {
-                     status = "fail",
-                     message = $"There is no game with this id {id}!"
-                 }) :
-                 Ok(new
-                 {
-                     status = "ok",
-                     entities = potentialGame.Keys_Game
-                 });
+            object res = subdata switch
+            {
+                EntitySubdata.Entities => new
+                {
+                    status = "ok",
+                    employees = potentialGame?.Keys_Game
+                },
+                EntitySubdata.UsedCategory => new
+                {
+                    status = "ok",
+                    usedcategory = potentialGame?.Category
+                },
+                _ => throw new Exception($"{subdata} instance is not covered.")
+            };
+            return potentialGame is null
+                ? NotFound(new
+                {
+                    status = "fail",
+                    message = $"There is no game with this id {id}!"
+                })
+                : Ok(res);
 
         }
 
@@ -103,15 +115,19 @@ namespace project_GameStore_server.Controllers
             });
         }
         /// <summary>
-        ///  change entities from game
+        ///  change subdataIds from game
         /// </summary>
         /// <param name="action"></param>
         /// <param name="id"></param>
-        /// <param name="entities">Json array of entities id</param>
+        /// <param name="subdataIds">Json array of subdataIds id</param>
         /// <returns></returns>
         [HttpPost]
         [Route("{id}/entities/add")]
-        public IActionResult ManipulateEntitiesInGame([FromRoute] project_GameStore_dblayer.EntityGateway.ActionType action, [FromRoute] Guid id, [FromBody] Guid[] entities)
+        [Route("{id}/{subdata}/{action}")]
+        public IActionResult ManipulateSubDataInProject([FromRoute] ActionType action,
+                                                        [FromRoute] EntitySubdata subdata,
+                                                        [FromRoute] Guid id,
+                                                        [FromBody] Guid[] subdataIds)
         {
             try
             {
@@ -122,10 +138,16 @@ namespace project_GameStore_server.Controllers
                         message = "You have no rights for this op."
                     });
 
-                _db.EntitiesInGame(action, id, entities);
+                var changed = subdata switch
+                {
+                    EntitySubdata.Entities => _db.EntitiesInGame(action, id, subdataIds),
+                    EntitySubdata.UsedCategory => _db.GamesInCategory(action, id, subdataIds),
+                    _ => throw new Exception($"{subdata} instance is not covered.")
+                };
                 return Ok(new
                 {
-                    status = "ok"
+                    status = "ok",
+                    changed
                 });
             }
             catch (Exception E)
@@ -140,6 +162,12 @@ namespace project_GameStore_server.Controllers
         }
 
 
-
+#pragma warning disable CS1591
+        public enum EntitySubdata
+        {
+            UsedCategory,
+            Entities
+        }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 }

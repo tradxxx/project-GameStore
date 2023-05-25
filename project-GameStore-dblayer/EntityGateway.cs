@@ -44,7 +44,26 @@ namespace project_GameStore_dblayer
                     game.Keys_Game.Add(entity);          
                 else  
                     game.Keys_Game.Remove(entity);
+
+            AddOrUpdate(game);
+            Context.SaveChanges();
             return entities.Length;
+        }
+
+        public int GamesInCategory(ActionType action, Guid categoryId, params Guid[] gamesIds) // sh*tcode
+        {
+            var category = Context.Categories.FirstOrDefault(x => x.Id == categoryId)
+                                        ?? throw new Exception("Category is not found.");
+            var games = Context.Games.Where(x => gamesIds.Contains(x.Id)).Except(category.Games).ToArray();
+
+            foreach (var game in games)
+                if (action == ActionType.Add)
+                    category.Games.Add(game);
+                else
+                    category.Games.Remove(game);
+            AddOrUpdate(category);
+            Context.SaveChanges();
+            return games.Length;
         }
 
 
@@ -81,7 +100,6 @@ namespace project_GameStore_dblayer
         #endregion
 
 
-        [JsonConverter(typeof(StringEnumConverter))]
         public enum ActionType
         {
             Add,
