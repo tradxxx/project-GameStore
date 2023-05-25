@@ -25,6 +25,24 @@ namespace project_GameStore_server.Controllers
             });
         }
 
+        [HttpGet("{id}")]
+        public IActionResult Get(Guid id) 
+        {
+            var potentialOrder = _db.GetOrders(x => x.Id == id).FirstOrDefault();
+            return potentialOrder is null
+                ? NotFound(new
+                {
+                    status = "fail",
+                    message = $"There is no order with this id {id}!"
+                })
+                : Ok(new
+                {
+                    status = "ok",
+                    order = potentialOrder,
+                    game = potentialOrder.Games.Select(x => x.Id)
+                });
+        }
+
         [HttpPost]
         public IActionResult Post([FromBody] Order value)
         {

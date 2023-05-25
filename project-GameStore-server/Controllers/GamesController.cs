@@ -70,17 +70,17 @@ namespace project_GameStore_server.Controllers
 
         [HttpGet]
         [Route("{id}/subdata")]
-        public IActionResult GetSubdataFromGame([FromRoute] Guid id, [FromRoute] EntitySubdata subdata)
+        public IActionResult GetSubdataFromGame([FromRoute] Guid id, [FromRoute] GameSubdata subdata)
         {
             var potentialGame = _db.GetGames(x => x.Id == id).FirstOrDefault();
             object res = subdata switch
             {
-                EntitySubdata.Entities => new
+                GameSubdata.Entities => new
                 {
                     status = "ok",
                     employees = potentialGame?.Keys_Game
                 },
-                EntitySubdata.UsedCategory => new
+                GameSubdata.UsedCategory => new
                 {
                     status = "ok",
                     usedcategory = potentialGame?.Category
@@ -125,7 +125,7 @@ namespace project_GameStore_server.Controllers
         [Route("{id}/entities/add")]
         [Route("{id}/{subdata}/{action}")]
         public IActionResult ManipulateSubDataInProject([FromRoute] ActionType action,
-                                                        [FromRoute] EntitySubdata subdata,
+                                                        [FromRoute] GameSubdata subdata,
                                                         [FromRoute] Guid id,
                                                         [FromBody] Guid[] subdataIds)
         {
@@ -140,8 +140,8 @@ namespace project_GameStore_server.Controllers
 
                 var changed = subdata switch
                 {
-                    EntitySubdata.Entities => _db.EntitiesInGame(action, id, subdataIds),
-                    EntitySubdata.UsedCategory => _db.GamesInCategory(action, id, subdataIds),
+                    GameSubdata.Entities => _db.EntitiesInGame(action, id, subdataIds),
+                    GameSubdata.UsedCategory => _db.GamesInCategory(action, id, subdataIds),
                     _ => throw new Exception($"{subdata} instance is not covered.")
                 };
                 return Ok(new
@@ -163,7 +163,7 @@ namespace project_GameStore_server.Controllers
 
 
 #pragma warning disable CS1591
-        public enum EntitySubdata
+        public enum GameSubdata
         {
             UsedCategory,
             Entities
