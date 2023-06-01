@@ -9,15 +9,17 @@ namespace project_GameStore_server.Controllers
     [ApiController]
     public class ChatController : ControllerBase
     {
-        LocalAuthService _localAuthService = LocalAuthService.GetInstance();
+       readonly LocalAuthService _localAuthService = LocalAuthService.GetInstance();
         readonly EntityGateway _db = new();
 
         private Guid Token => Guid.Parse(Request.Headers["Token"] != string.Empty ? Request.Headers["Token"] : Guid.Empty.ToString());
 
+        readonly ChatService _chatService = ChatService.GetInstance();
+
         [HttpGet]
-        public async Task<IActionResult> ConnectUser([FromBody] Guid game_id, Guid token)
+        public async Task<IActionResult> ConnectUser([FromRoute] Guid game_id, Guid token)
         {
-            var potentialGame = _db.GetGames(x => x.Id == game_id);
+            var potentialGame = _db.GetGames(x => x.Id == game_id).FirstOrDefault();
             if (potentialGame is null)
                 return NotFound(new
                 {
@@ -34,6 +36,7 @@ namespace project_GameStore_server.Controllers
             try
             {
                 var user = _localAuthService.GetClient(token);
+                await Task.Delay(TimeSpan.FromMilliseconds(-1), _chatService.CreateConnection(user,potentialGame, soket));
                 return Ok();
             }
             catch (Exception E)
