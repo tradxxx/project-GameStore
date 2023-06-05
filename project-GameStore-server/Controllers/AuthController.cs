@@ -103,8 +103,8 @@ namespace project_GameStore_server.Controllers
         /// <summary>
         /// register new client
         /// </summary>
-        /// <param name="userjson"></param>
-        /// <returns></returns>
+        /// <param name="userjson">must contain login, password,name and email of new client.</param>
+        /// <returns>creates user with "NEW" PersonalId</returns>
         [HttpPost]
         [Route("signup")]
         public IActionResult SignUp([FromBody] JObject userjson)

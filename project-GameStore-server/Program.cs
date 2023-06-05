@@ -3,6 +3,7 @@ using project_GameStore_server.Service;
 using System.Reflection;
 using Microsoft.Extensions.Options;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +17,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.UseInlineDefinitionsForEnums();
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+    c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
 });
 
 builder.Services.AddControllers().AddNewtonsoftJson(x =>

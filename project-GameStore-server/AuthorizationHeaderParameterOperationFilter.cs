@@ -22,13 +22,13 @@ namespace project_GameStore_server.Service
                 {
                     Name = "Token",
                     In = ParameterLocation.Header,
-                    //Description = "access token",
-                    //Required = true,
-                    //Schema = new OpenApiSchema
-                    //{
-                    //    Type = "String",
-                    //    Default = new OpenApiString("Bearer ")
-                    //}
+                    Description = "access token",
+                    Required = false,
+                    Schema = new OpenApiSchema
+                    {
+                        Type = "String",
+                        Default = new OpenApiString("Bearer ")
+                    }
                 });
             }
         }
