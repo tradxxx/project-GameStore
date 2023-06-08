@@ -13,7 +13,7 @@ namespace project_GameStore_server.Controllers
     public class GamesController : ControllerBase
     {
         private readonly EntityGateway _db = new();
-        private Guid Token => Guid.Parse(Request.Headers["Token"] != string.Empty ? Request.Headers["Token"] : Guid.Empty.ToString());
+        private Guid Token => Guid.Parse(Request.Headers["Token"] != string.Empty ? Request.Headers["Token"]! : Guid.Empty.ToString());
 
         /// <summary>
         /// Get Game news

@@ -48,7 +48,7 @@ namespace project_GameStore_server.Controllers
         {
             try
             {
-                if (LocalAuthService.GetInstance().GetRole(Token) != Role.Admin)
+                if (LocalAuthService.GetInstance().GetRole(Token) != Role.User)
                     return Unauthorized(new
                     {
                         status = "fail",

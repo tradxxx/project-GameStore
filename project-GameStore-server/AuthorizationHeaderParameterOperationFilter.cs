@@ -27,7 +27,7 @@ namespace project_GameStore_server.Service
                     Schema = new OpenApiSchema
                     {
                         Type = "String",
-                        Default = new OpenApiString("Bearer ")
+                        Default = new OpenApiString("")
                     }
                 });
             }

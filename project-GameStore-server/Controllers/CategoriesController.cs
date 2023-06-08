@@ -20,7 +20,7 @@ namespace project_GameStore_server.Controllers
             return Ok(new
             {
                 status = "ok",
-                games = _db.GetCategories()
+                categories = _db.GetCategories()
             });
         }
 

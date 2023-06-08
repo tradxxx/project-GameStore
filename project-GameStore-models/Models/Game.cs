@@ -17,7 +17,7 @@ namespace project_GameStore_models.Models
         [Required]
         [StringLength(500)]
         public string? Description { get; set; }
-        public virtual Category? Category { get; set; }
-        [JsonIgnore]public virtual ICollection<Entity_Game>? Keys_Game { get; set;}
+        [JsonIgnore] public virtual Category? Category { get; set; }
+        [JsonIgnore] public virtual ICollection<Entity_Game>? Keys_Game { get; set; }
     }
 }
